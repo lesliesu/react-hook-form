@@ -58,14 +58,17 @@ export const useFieldArray = <
     mapIds(
       (get(control._formValues, name) && _isMounted.current
         ? get(control._formValues, name)
-        : get(control._fieldArrayDefaultValues, getFieldArrayParentName(name))
-        ? get(control._fieldArrayDefaultValues, name)
+        : get(
+            control._fieldArrayDefaultValues.val,
+            getFieldArrayParentName(name),
+          )
+        ? get(control._fieldArrayDefaultValues.val, name)
         : get(control._defaultValues, name)) || [],
       keyName,
     ),
   );
 
-  set(control._fieldArrayDefaultValues, name, [...fields]);
+  set(control._fieldArrayDefaultValues.val, name, [...fields]);
   control._names.array.add(name);
 
   const omitKey = <
@@ -81,7 +84,7 @@ export const useFieldArray = <
     const values = get(control._formValues, name, []);
 
     return mapIds<TFieldValues, TKeyName>(
-      get(control._fieldArrayDefaultValues, name, []).map(
+      get(control._fieldArrayDefaultValues.val, name, []).map(
         (item: Partial<TFieldValues>, index: number) => ({
           ...item,
           ...values[index],
@@ -425,10 +428,14 @@ export const useFieldArray = <
           unset(control._formValues, inputFieldArrayName || name);
 
           inputFieldArrayName
-            ? set(control._fieldArrayDefaultValues, inputFieldArrayName, values)
-            : values && (control._fieldArrayDefaultValues = values);
+            ? set(
+                control._fieldArrayDefaultValues.val,
+                inputFieldArrayName,
+                values,
+              )
+            : values && (control._fieldArrayDefaultValues.val = values);
 
-          setFieldsAndNotify(get(control._fieldArrayDefaultValues, name));
+          setFieldsAndNotify(get(control._fieldArrayDefaultValues.val, name));
         }
       },
     });
@@ -440,11 +447,11 @@ export const useFieldArray = <
       fieldArraySubscription.unsubscribe();
       if (control._shouldUnregister || shouldUnregister) {
         control.unregister(name as FieldPath<TFieldValues>);
-        unset(control._fieldArrayDefaultValues, name);
+        unset(control._fieldArrayDefaultValues.val, name);
       } else {
         const fieldArrayValues = get(control._formValues, name);
         fieldArrayValues &&
-          set(control._fieldArrayDefaultValues, name, fieldArrayValues);
+          set(control._fieldArrayDefaultValues.val, name, fieldArrayValues);
       }
     };
   }, []);

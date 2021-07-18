@@ -1114,7 +1114,12 @@ export function createFormControl<
       _fields,
       _formValues,
       _proxyFormState,
-      _defaultValues,
+      get _defaultValues() {
+        return _defaultValues;
+      },
+      set _defaultValues(value) {
+        _defaultValues = value;
+      },
       get _names() {
         return _names;
       },
@@ -1139,11 +1144,13 @@ export function createFormControl<
       set _formState(value) {
         _formState = value;
       },
-      get _fieldArrayDefaultValues() {
-        return _fieldArrayDefaultValues;
-      },
-      set _fieldArrayDefaultValues(value) {
-        _fieldArrayDefaultValues = value;
+      _fieldArrayDefaultValues: {
+        get val() {
+          return _fieldArrayDefaultValues;
+        },
+        set val(value) {
+          _fieldArrayDefaultValues = value;
+        },
       },
       _updateProps: (options) => {
         formOptions = { ...defaultOptions, ...options };
