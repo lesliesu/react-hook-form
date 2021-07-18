@@ -304,10 +304,6 @@ export type Names = {
   watchAll: boolean;
 };
 
-export type FormControl<T> = {
-  val: T;
-};
-
 export type Control<
   TFieldValues extends FieldValues = FieldValues,
   TContext extends object = object,
@@ -320,7 +316,7 @@ export type Control<
   _registerMissFields: RegisterMissFields<TFieldValues>;
   _isInAction: boolean;
   _getIsDirty: GetIsDirty;
-  _fieldArrayDefaultValues: FormControl<FieldArrayDefaultValues>;
+  _fieldArrayDefaultValues: FieldArrayDefaultValues;
   _formState: FormState<TFieldValues>;
   _updateValid: <T extends FieldValues>(payload?: T) => void;
   _fields: FieldRefs;
