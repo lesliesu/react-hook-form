@@ -51,12 +51,12 @@ export function useForm<
     const formStateSubscription = control._subjects.state.subscribe({
       next(formState) {
         if (shouldRenderFormState(formState, control._proxyFormState, true)) {
-          control._formState.val = {
-            ...control._formState.val,
+          control._formState = {
+            ...control._formState,
             ...formState,
           };
 
-          updateFormState({ ...control._formState.val });
+          updateFormState({ ...control._formState });
         }
       },
     });
@@ -81,14 +81,14 @@ export function useForm<
     const isLiveInDom = (ref: Ref) =>
       !isHTMLElement(ref) || !document.contains(ref);
 
-    if (!control._isMounted.val) {
-      control._isMounted.val = true;
+    if (!control._isMounted) {
+      control._isMounted = true;
       control._proxyFormState.isValid && control._updateValid();
       !props.shouldUnregister &&
         control._registerMissFields(control._defaultValues);
     }
 
-    for (const name of control._names.val.unMount) {
+    for (const name of control._names.unMount) {
       const field = get(control._fields, name) as Field;
 
       field &&
@@ -103,7 +103,7 @@ export function useForm<
         unregisterFieldNames as FieldPath<TFieldValues>[],
       );
 
-    control._names.val.unMount = new Set();
+    control._names.unMount = new Set();
   });
 
   return {

@@ -119,7 +119,7 @@ export function createFormControl<
   let _formValues = {};
   let _defaultValues = formOptions.defaultValues || {};
   let _fieldArrayDefaultValues = {};
-  let _isDuringAction = false;
+  let _isInAction = false;
   let _isMounted = false;
   const _subjects: Subjects<TFieldValues> = {
     watch: new Subject(),
@@ -931,8 +931,7 @@ export function createFormControl<
 
               _shouldUnregister &&
                 !(
-                  isNameInFieldArray(_names.array as any, name) &&
-                  _isDuringAction
+                  isNameInFieldArray(_names.array as any, name) && _isInAction
                 ) &&
                 _names.unMount.add(name);
             }
@@ -1121,29 +1120,29 @@ export function createFormControl<
       set _defaultValues(value) {
         _defaultValues = value;
       },
-      _names: {
-        get val() {
-          return _names;
-        },
-        set val(value) {
-          _names = value;
-        },
+      get _names() {
+        return _names;
       },
-      _isDuringAction: {
-        get val() {
-          return _isDuringAction;
-        },
-        set val(value) {
-          _isDuringAction = value;
-        },
+      set _names(value) {
+        _names = value;
       },
-      _formState: {
-        get val() {
-          return _formState;
-        },
-        set val(value) {
-          _formState = value;
-        },
+      get _isInAction() {
+        return _isInAction;
+      },
+      set _isInAction(value) {
+        _isInAction = value;
+      },
+      get _isMounted() {
+        return _isMounted;
+      },
+      set _isMounted(value) {
+        _isMounted = value;
+      },
+      get _formState() {
+        return _formState;
+      },
+      set _formState(value) {
+        _formState = value;
       },
       _fieldArrayDefaultValues: {
         get val() {
@@ -1151,14 +1150,6 @@ export function createFormControl<
         },
         set val(value) {
           _fieldArrayDefaultValues = value;
-        },
-      },
-      _isMounted: {
-        get val() {
-          return _isMounted;
-        },
-        set val(value) {
-          _isMounted = value;
         },
       },
       _updateProps: (options) => {
